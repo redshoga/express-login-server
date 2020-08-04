@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>localhost:3000</title>
+</head>
+<body>
+  <button id="login">LOGIN</button>
+  <button id="logout">LOGOUT</button>
+  <button id="status">GET STATUS</button>
+  <div id="result">RESULT HERE</div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+    axios.defaults.withCredentials = true
+    axios.defaults.baseURL = "http://example.com";
+
+    $("#status").click(async () => {
+      console.log("GET STATUS")
+      const res = await axios.get(`/api/status`)
+      $("#result").text(res.data)
+      console.log(res)
+    })
+
+    $("#login").click(async () => {
+      console.log("LOGIN")
+      const res = await axios.get(`/api/login`)
+      $("#result").text(res.data)
+      console.log(res)
+    })
+
+    $("#logout").click(async () => {
+      console.log("LOGOUT")
+      const res = await axios.get(`/api/logout`)
+      $("#result").text(res.data)
+      console.log(res)
+    })
+  </script>
+</body>
+</html>
