@@ -2,12 +2,24 @@ import * as express from "express";
 import * as bodyParser from "body-parser";
 import * as expressSession from "express-session";
 import * as cookieParser from "cookie-parser";
+import * as fs from "fs";
+import * as https from "https";
+
+// console.log(fs);
+// console.log(https);
 
 const PORT: number = 80;
-const WEB_DOMAIN: string = "example.com";
-const WEB_DOMAIN_URL: string = "http://sub.example.com";
+// cookie側の設定
+const WEB_DOMAIN: string = "be.com";
+// CORS側の設定
+const WEB_DOMAIN_URL: string = "https://fe.com";
 
 const app = express();
+
+const options = {
+  key: fs.readFileSync("./server_key.pem"),
+  cert: fs.readFileSync("./server_crt.pem"),
+};
 
 // extend types
 declare global {
@@ -45,7 +57,7 @@ app.use(
       httpOnly: true,
       maxAge: 60 * 1000,
       // secure: true,
-      sameSite: "strict",
+      sameSite: "none",
       domain: WEB_DOMAIN,
     },
   })
@@ -80,6 +92,6 @@ app.get("/api/logout", (req, res) => {
 });
 
 // start
-app.listen(PORT, () =>
-  console.log(`The app listening on http://localhost:${PORT}`)
-);
+https.createServer(options, app).listen(PORT, () => {
+  console.log(`The app listening on https://localhost:${PORT}`);
+});
